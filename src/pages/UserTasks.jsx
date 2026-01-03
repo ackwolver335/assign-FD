@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Alert from "../components/Alert";
+import UserProfile from "../components/UserProfile";
+import UserData from '../components/UserData'
 
 export default function UserTasks() {
    
@@ -17,12 +19,14 @@ export default function UserTasks() {
         const token = localStorage.getItem('token');
         if(token) navigate('/usertask');
         else navigate('/login')
-    }, []);
+    },[navigate]);
 
     return (
         <>
             <Alert />
             <Navbar />
+            <UserProfile />
+            <UserData />
             <Footer />
         </>
     );

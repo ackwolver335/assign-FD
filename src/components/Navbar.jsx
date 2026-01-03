@@ -21,6 +21,19 @@ export default function Navbar() {
         navigate('/');
     }
 
+    // scroll to different views
+    const scrollToViews = (e) => {
+        e.preventDefault();
+        navigate('/');
+
+        setTimeout(() => {
+        const el = document.querySelector('#features');
+        if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+        }
+        }, 100);
+    }
+
     return (
         <div className="bg-navBG z-30 fixed top-0 right-0 left-0 flex flex-row justify-between py-2 px-3 sm:px-4 md:px-5 lg:py-3 xl:py-4">
             
@@ -37,7 +50,7 @@ export default function Navbar() {
 
             {/* list regarding Navigation */}
             <div className="menuList flex flex-col absolute md:relative top-14 sm:top-16 sm:py-3 sm:px-4 shadow-md lg:shadow-lg md:shadow-none left-6 md:top-0 md:left-0 md:right-0 md:flex-row text-mainCR bg-white p-2 px-3 ease-in duration-200 rounded-sm sm:rounded-md -translate-y-50 md:translate-0 md:rounded-none md:text-white list-none items-center font-poppins font-semibold text-sm sm:text-base gap-1 sm:gap-2 md:gap-4 lg:gap-5 md:bg-transparent md:p-0">
-                <li onClick={(e) => { e.preventDefault(); navigate('/'); document.querySelector('#features').scrollIntoView({ behavior: "smooth" }) }} className="cursor-pointer active:scale-90 ease-in duration-100"> Features </li>
+                <li onClick={scrollToViews} className="cursor-pointer active:scale-90 ease-in duration-100"> Features </li>
                 <li onClick={() => { navigate('/signup') }} className={`${user ? 'hidden' : ''} cursor-pointer md:border md:border-white/60 md:rounded-md lg:rounded-lg md:px-2 lg:px-3 md:py-1 active:scale-90 ease-in duration-100`}> Sign Up </li>
                 <li onClick={() => { navigate('/login') }} className={`${user ? 'hidden' : ''} cursor-pointer md:border md:border-white/60 md:rounded-md lg:rounded-lg md:px-2 lg:px-3 md:py-1 active:scale-90 ease-in duration-100`}> Log In </li>
                 <li onClick={() => { logOut(); navigate('/') }} className={`${user ? '' : 'hidden'} cursor-pointer md:border md:border-white/60 md:rounded-md lg:rounded-lg md:px-2 lg:px-3 md:py-1 active:scale-90 ease-in duration-100`}> Log Out </li>
