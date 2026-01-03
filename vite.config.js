@@ -8,4 +8,9 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
+  server: {
+    host: '0.0.0.0',
+    port: import.meta.env.PORT || 5173,
+    allowedHosts: ['assign-backend-i3zo.onrender','*'],
+  },
 })

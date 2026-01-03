@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import Alert from "../components/Alert";
 import UserProfile from "../components/UserProfile";
 import UserData from '../components/UserData'
+import AddTasks from "../components/AddTasks";
 
 export default function UserTasks() {
    
@@ -27,6 +28,7 @@ export default function UserTasks() {
             <Navbar />
             <UserProfile />
             <UserData />
+            <AddTasks />
             <Footer />
         </>
     );

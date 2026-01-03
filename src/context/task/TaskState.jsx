@@ -65,7 +65,6 @@ export default function TaskState(props){
 
         const json = await response.json();
         if(json.success){
-            
             showAlert(true,'Success','Task Updated Successfully !');
             setTasks(prevTasks => prevTasks.map(task => task._id === json.task._id ? json.task : task));
         } else showAlert(true,'Danger', Array.isArray(json.result) && json.result.length > 0 ? json.result[0].msg : json.message);

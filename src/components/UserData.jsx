@@ -1,11 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import taskContext from '../context/task/taskContext'
-import alertContext from '../context/alert/alertContext';
 
 export default function UserData() {
-
-    // alert regarding different status
-    const {showAlert} = useContext(alertContext);
 
     // different methods from task content regarding different operations
     const { tasks, getUserTasks, updateTask, deleteTask } = useContext(taskContext);
@@ -13,13 +9,30 @@ export default function UserData() {
     // state regarding storing tasks
     const [task, setTask] = useState({ id: '', title: '', description: '',category: '' });
 
+    // method for getting or setting details of current task in the Update Task form
+    const handleCurrentTask = (currentTask) => {
+        setTask({ id : currentTask._id, title : currentTask.title, description : currentTask.description, category: currentTask.category});
+        document.querySelector('.updateForm').classList.remove('translate-y-125');
+    }
+
+    // method for updating the task and its values 
+    const submitForm = (e) => {
+        e.preventDefault();
+
+        updateTask(task.id,task.title,task.description,task.category);
+        document.querySelector('.updateForm').classList.add('translate-y-125');
+        setTask({ id: '', title: '', description: '',category: '' });
+    }
+
+    // method for clearing all the data at once
+    const clearAllEntries = () => setTask({ id: '', title: '', description: '',category: '' });
+
     useEffect(() => {
         getUserTasks();
     },[])
     
-
   return (
-    <div className={`pb-36 sm:pb-40 md:pb-52 lg:pb-60 pt-0 lg:py-10 px-6 lg:px-12 xl:px-30 flex flex-col ${tasks.length == 0 ? '' : 'lg:grid lg:grid-cols-2 lg:gap-x-10 xl:gap-x-20 lg:gap-y-6 xl:gap-y-10'} justify-center gap-3 sm:gap-5 items-center`}>
+    <div className={`pt-0 lg:py-10 px-6 lg:px-12 xl:px-30 flex flex-col ${tasks.length == 0 ? '' : 'lg:grid lg:grid-cols-2 lg:gap-x-10 xl:gap-x-20 lg:gap-y-6 xl:gap-y-10'} justify-center gap-3 sm:gap-5 items-center`}>
       
         {tasks.length == 0 ?
 
@@ -44,7 +57,7 @@ export default function UserData() {
 
                 <div className="flex flex-row items-center justify-start gap-2 lg:gap-3 pt-3 py-1">
 
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-pencil-square w-5 text-white cursor-pointer" viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-pencil-square w-5 text-white cursor-pointer" viewBox="0 0 16 16" onClick={() => handleCurrentTask(task)}>
                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                         <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                     </svg>
@@ -60,9 +73,40 @@ export default function UserData() {
 
         }
 
-        <form className="bottom-5 right-5 px-4 py-2 shadow-lg lg:shadow-xl rounded-sm sm:rounded-md lg:rounded-lg bg-white z-50 fixed">
+        <form className="updateForm bottom-5 translate-y-125 sm:bottom-10 w-4/5 sm:w-2/3 md:w-2/4 lg:w-2/5 xl:w-2/6 right-5 sm:right-10 p-4 shadow-lg lg:shadow-xl rounded-sm sm:rounded-md lg:rounded-lg bg-white z-50 fixed flex flex-col items-center gap-3 lg:gap-5 xl:gap-4 ease-in duration-350">
 
+            <div className="flex flex-row justify-between items-center w-full">
+                <h3 className="sm:text-lg font-poppins font-semibold"> Update Task </h3>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-x-square-fill w-5 sm:w-6 text-navBG cursor-pointer" viewBox="0 0 16 16" onClick={() => { document.querySelector('.updateForm').classList.add('translate-y-125') }}>
+                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708"/>
+                </svg>
+            </div>
 
+            {/* task's title */}
+            <div className="flex flex-col items-start w-full gap-1 lg:gap-2 xl:gap-3">
+                <label htmlFor="" className="text-[12px] font-poppins font-semibold text-navBG"> Task Title </label>
+                <input type="text" placeholder="Your Task Title.." value={task.title} onChange={(e) => { setTask(prev => ({ ...prev, title : e.target.value })) }} className="font-gg font-semibold text-base border border-navBG focus:outline-0 w-full rounded-sm md:rounded-md focus:rounded-xl px-3 py-1 ease-in duration-150" required />
+            </div>
+
+            {/* task's Descrption */}
+            <div className="flex flex-col items-start w-full gap-1 lg:gap-2 xl:gap-3">
+                <label htmlFor="" className="text-[12px] font-poppins font-semibold text-navBG"> Task Description </label>
+                <textarea type="text" rows={3} placeholder="Your task's description..." value={task.description} onChange={(e) => { setTask(prev => ({ ...prev, description : e.target.value })) }} className="font-gg font-semibold resize-none text-base border border-navBG focus:outline-0 w-full rounded-sm md:rounded-md focus:rounded-xl px-3 py-1 ease-in duration-150" required> </textarea>
+            </div>
+
+            {/* task's Category */}
+            <div className="flex flex-col items-start w-full gap-1 lg:gap-2 xl:gap-3">
+                <label htmlFor="" className="text-[12px] font-poppins font-semibold text-navBG"> Task Category </label>
+                <select type="text" placeholder="Your task's description..." value={task.category} onChange={(e) => { setTask(prev => ({ ...prev, category : e.target.value })) }} className="font-gg font-medium resize-none text-base border border-navBG focus:outline-0 w-full rounded-sm md:rounded-md px-3 py-1 ease-in duration-150">
+                    <option> Public </option>
+                    <option> Private </option>
+                </select>
+            </div>
+
+            <div className="flex flex-row items-center justify-start w-full gap-2 lg:gap-3">
+                <button type="submit" onClick={submitForm} className="w-fit px-3 py-1 lg:py-2 text-white bg-navBG rounded-md lg:rounded-lg cursor-pointer font-gg font-semibold text-sm md:text-base ease-in duration-150 active:scale-90"> Update </button>
+                <button onClick={clearAllEntries} className="w-fit px-3 py-1 lg:py-2 text-white bg-navBG rounded-md lg:rounded-lg cursor-pointer font-gg font-semibold text-sm md:text-base ease-in duration-150 active:scale-90"> Clear Data </button>
+            </div>
 
         </form>
 
